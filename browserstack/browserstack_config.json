@@ -1,6 +1,7 @@
 {
   "browsers": [
-    {
+   
+     {
       "os": "Windows",
       "os_version": "10",
       "browser": "Chrome",
@@ -19,16 +20,16 @@
       "browser_version": "latest"
     },
     {
+      "device": "iPhone 16",
+      "os_version": "18.2",
+      "real_mobile": true,
+      "browser": "Safari"
+    },
+     {
       "device": "Samsung Galaxy S22",
       "os_version": "12.0",
       "real_mobile": true,
       "browser": "Chrome"
-    },
-    {
-      "device": "iPhone 14",
-      "os_version": "16",
-      "real_mobile": true,
-      "browser": "Safari"
     }
   ]
 }
