@@ -14,7 +14,6 @@ class OpinionPage(BasePage):
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_all_elements_located(self.article_selector)
         )
-        articles = self.driver.find_elements(*self.article_selector)[:max_articles]
 
         if not os.path.exists(download_dir):
             os.makedirs(download_dir)
@@ -22,32 +21,40 @@ class OpinionPage(BasePage):
         results = []
         translated_titles = []
 
-        for i, article in enumerate(articles):
-            title_elem = article.find_element(By.CSS_SELECTOR, "h2.c_t a")
-            title = title_elem.text
-            url = title_elem.get_attribute("href")
-            translated = translate_text(title)
-            translated_titles.append(translated)
-
+        for i in range(max_articles):
             try:
-                summary = article.find_element(By.CSS_SELECTOR, "p.c_d").text
-            except:
-                summary = ""
+                # 🔁 Re-fetch articles on each iteration to avoid stale element reference
+                articles = self.driver.find_elements(*self.article_selector)[:max_articles]
+                article = articles[i]
 
-            try:
-                img_elem = article.find_element(By.CSS_SELECTOR, "img")
-                img_url = img_elem.get_attribute("src")
-                img_path = download_image(img_url, download_dir, f"article_{i+1}.jpg")
-            except:
-                img_url = img_path = None
+                title_elem = article.find_element(By.CSS_SELECTOR, "h2.c_t a")
+                title = title_elem.text
+                url = title_elem.get_attribute("href")
+                translated = translate_text(title)
+                translated_titles.append(translated)
 
-            results.append({
-                "title": title,
-                "translated_title": translated,
-                "url": url,
-                "summary": summary,
-                "img_url": img_url,
-                "img_path": img_path
-            })
+                try:
+                    summary = article.find_element(By.CSS_SELECTOR, "p.c_d").text
+                except:
+                    summary = ""
+
+                try:
+                    img_elem = article.find_element(By.CSS_SELECTOR, "img")
+                    img_url = img_elem.get_attribute("src")
+                    img_path = download_image(img_url, download_dir, f"article_{i+1}.jpg")
+                except:
+                    img_url = img_path = None
+
+                results.append({
+                    "title": title,
+                    "translated_title": translated,
+                    "url": url,
+                    "summary": summary,
+                    "img_url": img_url,
+                    "img_path": img_path
+                })
+
+            except Exception as e:
+                print(f"[!] Skipping article {i+1} due to error: {e}")
 
         return results, translated_titles
