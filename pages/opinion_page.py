@@ -23,7 +23,6 @@ class OpinionPage(BasePage):
 
         for i in range(max_articles):
             try:
-                # 🔁 Re-fetch articles on each iteration to avoid stale element reference
                 articles = self.driver.find_elements(*self.article_selector)[:max_articles]
                 article = articles[i]
 

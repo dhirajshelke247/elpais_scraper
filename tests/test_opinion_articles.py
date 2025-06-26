@@ -2,7 +2,6 @@ from pages.home_page import HomePage
 from pages.opinion_page import OpinionPage
 from collections import Counter
 import re
-import pytest
 
 def test_scrape_and_translate(driver_config, driver, base_url):
     driver.get(base_url)
@@ -21,7 +20,6 @@ def test_scrape_and_translate(driver_config, driver, base_url):
         print("Summary:", article["summary"])
         print("Image saved at:", article["img_path"])
 
-    # 🔍 Repeated word analysis
     words = []
     for title in translated_titles:
         title = re.sub(r"[^\w\s]", "", title.lower())
