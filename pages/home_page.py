@@ -19,14 +19,12 @@ class HomePage(BasePage):
 
     def accept_consent(self):
         try:
-            # First try the regular consent button
             WebDriverWait(self.driver, 5).until(
                 EC.element_to_be_clickable(self.consent_button)
             ).click()
             print("[i] Clicked standard consent button.")
         except:
             try:
-                # Try iOS-specific button
                 ios_consent_button = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.pmConsentWall-button'))
                 )
@@ -55,7 +53,6 @@ class HomePage(BasePage):
             return False
 
     def go_to_opinion(self):
-        # Open hamburger menu if on mobile
         if self.is_mobile():
             try:
                 WebDriverWait(self.driver, 10).until(
@@ -65,14 +62,12 @@ class HomePage(BasePage):
                 print(f"[!] Could not click hamburger menu: {e}")
 
         try:
-            # Try to locate the element first
             opinion_link = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((
                     By.XPATH, '//a[contains(@href, "/opinion/") and contains(text(), "Opinión")]'
                 ))
             )
 
-            # Try clicking normally
             try:
                 WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((
@@ -80,7 +75,6 @@ class HomePage(BasePage):
                     ))
                 ).click()
             except:
-                # Fallback to JS click if normal click fails
                 self.driver.execute_script("arguments[0].click();", opinion_link)
 
         except Exception as e:

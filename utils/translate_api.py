@@ -21,7 +21,7 @@ def translate_text(text, to_lang="en"):
         response = requests.post(url, data=payload, headers=headers)
         response.raise_for_status()
         result = response.json()
-        return result.get("trans", text)  # FIXED KEY HERE
+        return result.get("trans", text)
     except Exception as e:
         print(f"[Translation Error] '{text}' → {e}")
         return text
